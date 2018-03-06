@@ -3,6 +3,6 @@ An experiment measuring the optimal distance and angle at which a world-space UI
 
 Developed in Unity 20173.0f3.
 
-Using:
-Firebase SDK to collect analytics on study participants.
+Using:<br>
+Firebase SDK to collect analytics on study participants.<br>
 VRTK for Oculus Touch interactions.
