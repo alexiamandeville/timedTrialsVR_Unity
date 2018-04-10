@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using CI.QuickSave;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.IO;
 
 public class Trial : MonoBehaviour {
 
@@ -12,16 +12,20 @@ public class Trial : MonoBehaviour {
     int _trialID;
     string _acquisitionType; //my feedback type
     float _width;
-    int _distance;
+    string _distance;
     bool _selected;
     float _taskTime;
     DateTime _timestamp;
+
+    string file;
+    StreamWriter line;
 
     // UI data
     public Text myUserUI;
     public Dropdown[] myOrderUI;
     public GameObject myStartMenu;
     public GameObject controlTarget;
+    public Text myFilePath;
 
     // Data variables
     string[] myOrders = new String[3] {" ", " ", " "}; // Store the acquisition order in this
@@ -30,15 +34,24 @@ public class Trial : MonoBehaviour {
 
     // Temp variables
     string myAquisitionType;
-    int myTrial = 1;
+    int myTrial = 0;
     float myTimer = 0.0f;
     float myWidth;
     string myButtonDistance;
     int randomButton;
     int randomWidth;
+    bool mySelected;
 
     private void Start()
     {
+        file = Application.persistentDataPath + "/" + "FittsData.csv";
+        myFilePath.text = file;
+        // Does the file already exist?
+        if (!File.Exists(file))
+        {
+            line = File.CreateText(file);
+        }
+
         ResetData();
         controlTarget.SetActive(true); // Turn on our control target
     }
@@ -113,9 +126,11 @@ public class Trial : MonoBehaviour {
 
         myWidth = myWidths[randomWidth]; // Set up with width
         myButtons[randomButton].GetComponent<RectTransform>().localScale = new Vector3(myWidth, 1.0f, 1.0f); // Change the scale of the button
-
         myButtons[randomButton].SetActive(true); // Pick a random button to show
         myButtonDistance = myButtons[randomButton].name; // Store which button was shown
+
+        print(myTrial);
+        print(myAquisitionType);
 
     }
 
@@ -123,9 +138,10 @@ public class Trial : MonoBehaviour {
     public void TriggerEvent()
     {
         // Check to see if target was hit
+        // mySelected = true;
 
         SetFinalData();
-        Save(); // Save our data to a json file
+        StartCoroutine(Save()); // Save our data to a json file
         ResetData();
         controlTarget.SetActive(true); // Turn on our control target
 
@@ -154,12 +170,12 @@ public class Trial : MonoBehaviour {
 
     void ResetData()
     {
-        foreach(GameObject button in myButtons)
+        StopCoroutine(Save());
+        foreach (GameObject button in myButtons)
         {
             button.SetActive(false);
         }
-
-
+        mySelected = false;
         randomButton = UnityEngine.Random.Range(0, 2);
         randomWidth = UnityEngine.Random.Range(0, 2);
     }
@@ -170,24 +186,43 @@ public class Trial : MonoBehaviour {
         _taskTime = myTimer;
         _acquisitionType = myAquisitionType;
         _width = myWidth;
-        _distance = int.Parse(myButtonDistance);
+        _distance = myButtonDistance;
+        _selected = mySelected;
     }
 
-    public void Save()
+    IEnumerator Save()
     {
-        QuickSaveWriter.Create("Inputs")
-            .Write("Timestamp", _timestamp)
-            .Write("User", _userID)
-            .Write("Trial", _trialID)
-            .Write("AcquisitionType", _acquisitionType)
-            .Write("TargetDistance", _distance)
-            .Write("TargetWidth", _width)
-            .Write("TargetSelection", _selected)
-            .Write("TargetSelectionTie", _taskTime)
-            .Commit();
 
-        // ToDo where does this save?
-        QuickSaveRaw.LoadString("Inputs.json"); // Save to file
+        // Does the file already exist?
+        if (File.Exists(file))
+        {
+            // string dataCSV = "Timestamp,UserID,Trial,AcquisitionType,TargetDistance,TargetWidth,TargetSelect,TaskTime";
+            string dataCSV = _timestamp.ToString("yyyy/MM/dd HH:mm:ss") + "," + _userID.ToString() + "," + _trialID.ToString() + "," + _acquisitionType.ToString() + "," + _distance.ToString() + "," + _width.ToString() + "," + _selected.ToString() + "," + _taskTime.ToString();
+
+            line = File.AppendText(file);
+            
+            line.WriteLine(dataCSV);
+            
+
+            line.Close();
+
+        }
+
+        yield return new WaitForSeconds(0.5f); // Wait to make sure we've written to the file
+
+    }
+
+    // Let's take a look at the data (UI button)
+    public void OpenDataFile()
+    {
+        // Does the file already exist?
+        if (File.Exists(file))
+        {
+            Application.OpenURL(file);
+        } else
+        {
+            print("No file exists. Start a trial to generate a file.");
+        }
     }
 
 }
