@@ -138,17 +138,24 @@ public class Trial : MonoBehaviour {
     public void HasSelected()
     {
         mySelected = true;
+        StopCoroutine(Wait());
+
     }
 
     // Check to see if user has pressed trigger (VRTK public event)
     public void TriggerEvent()
     {
-
+        StartCoroutine(Wait());
         SetFinalData();
         StartCoroutine(Save()); // Save our data to a json file
         ResetData();
         controlTarget.SetActive(true); // Turn on our control target
 
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(1);
     }
 
     void FeedbackType(String myType)
