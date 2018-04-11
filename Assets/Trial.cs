@@ -134,11 +134,15 @@ public class Trial : MonoBehaviour {
 
     }
 
+    // Used to determine if user has pressed button (UI button event)
+    public void HasSelected()
+    {
+        mySelected = true;
+    }
+
     // Check to see if user has pressed trigger (VRTK public event)
     public void TriggerEvent()
     {
-        // Check to see if target was hit
-        // mySelected = true;
 
         SetFinalData();
         StartCoroutine(Save()); // Save our data to a json file
