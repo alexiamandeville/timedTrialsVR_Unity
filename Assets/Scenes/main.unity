@@ -5915,6 +5915,7 @@ GameObject:
   - component: {fileID: 575808925}
   - component: {fileID: 575808923}
   - component: {fileID: 575808924}
+  - component: {fileID: 575808922}
   m_Layer: 0
   m_Name: Headset
   m_TagString: Untagged
@@ -5935,6 +5936,31 @@ Transform:
   m_Father: {fileID: 499920624}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &575808922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 575808920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b26f999cbdac8478b6c2a046256169, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activationButton: 10
+  activationMode: 2
+  selectionButton: 3
+  clickMethod: 0
+  attemptClickOnDeactivate: 0
+  clickAfterHoverDuration: 3
+  controller: {fileID: 1514284773}
+  pointerOriginTransform: {fileID: 0}
+  hoveringElement: {fileID: 0}
+  controllerRenderModel: {fileID: 0}
+  hoverDurationTimer: 0
+  canClickOnHover: 0
+  autoActivatingCanvas: {fileID: 0}
+  collisionClick: 0
 --- !u!114 &575808923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6016,7 +6042,7 @@ MonoBehaviour:
   selectAfterHoverDuration: 0
   interactWithObjects: 0
   grabToPointerTip: 0
-  controller: {fileID: 0}
+  controller: {fileID: 1514284773}
   interactUse: {fileID: 0}
   customOrigin: {fileID: 0}
 --- !u!1 &592239188
@@ -7208,8 +7234,6 @@ GameObject:
   - component: {fileID: 734900879}
   - component: {fileID: 734900878}
   - component: {fileID: 734900881}
-  - component: {fileID: 734900880}
-  - component: {fileID: 734900882}
   m_Layer: 0
   m_Name: LeftController
   m_TagString: Untagged
@@ -7579,18 +7603,6 @@ MonoBehaviour:
   maximumCursorScale: {x: Infinity, y: Infinity, z: Infinity}
   customTracer: {fileID: 0}
   customCursor: {fileID: 0}
---- !u!114 &734900880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 734900875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64e104da36bd3b04b90c6ae969ac66dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  customColliderContainer: {fileID: 0}
 --- !u!114 &734900881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7616,18 +7628,6 @@ MonoBehaviour:
   canClickOnHover: 0
   autoActivatingCanvas: {fileID: 0}
   collisionClick: 0
---- !u!114 &734900882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 734900875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64e104da36bd3b04b90c6ae969ac66dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  customColliderContainer: {fileID: 0}
 --- !u!1 &742723313
 GameObject:
   m_ObjectHideFlags: 0
@@ -15126,7 +15126,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1514284765}
   - component: {fileID: 1514284773}
-  - component: {fileID: 1514284772}
   - component: {fileID: 1514284771}
   - component: {fileID: 1514284770}
   - component: {fileID: 1514284769}
@@ -15457,7 +15456,7 @@ MonoBehaviour:
   targetListPolicy: {fileID: 0}
   pointerRenderer: {fileID: 1514284768}
   activationButton: 10
-  holdButtonToActivate: 1
+  holdButtonToActivate: 0
   activateOnEnable: 0
   activationDelay: 0
   selectionButton: 3
@@ -15495,11 +15494,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activationButton: 10
-  activationMode: 0
+  activationMode: 2
   selectionButton: 3
   clickMethod: 0
   attemptClickOnDeactivate: 0
-  clickAfterHoverDuration: 2
+  clickAfterHoverDuration: 3
   controller: {fileID: 0}
   pointerOriginTransform: {fileID: 0}
   hoveringElement: {fileID: 0}
@@ -15508,19 +15507,6 @@ MonoBehaviour:
   canClickOnHover: 0
   autoActivatingCanvas: {fileID: 0}
   collisionClick: 0
---- !u!114 &1514284772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114589645520701644, guid: 7a06ed352700f0042893322ca0f6cb3e,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1514284766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64e104da36bd3b04b90c6ae969ac66dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  customColliderContainer: {fileID: 0}
 --- !u!114 &1514284773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15533,8 +15519,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba3cd5456cd79e49948f5ceb58544b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointerToggleButton: 0
-  pointerSetButton: 0
+  pointerToggleButton: 10
+  pointerSetButton: 10
   grabToggleButton: 7
   useToggleButton: 3
   uiClickButton: 0
@@ -16626,7 +16612,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1581762392}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -2.622, y: 0.5, z: 0.667}
+  m_LocalPosition: {x: -2.622, y: 0.5, z: 0.71}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 459037921}
