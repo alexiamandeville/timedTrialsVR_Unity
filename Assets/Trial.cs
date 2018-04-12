@@ -26,9 +26,11 @@ public class Trial : MonoBehaviour {
     public GameObject myStartMenu;
     public GameObject controlTarget;
     public Text myFilePath;
+    public GameObject breakUI;
+    public GameObject endUI;
 
     // Data variables
-    string[] myOrders = new String[3] {" ", " ", " "}; // Store the acquisition order in this
+    string[] myOrders = new String[6] {" ", " ", " ", " ", " ", " " }; // Store the acquisition order in this
     public float[] myWidths;
     public GameObject[] myButtons;
 
@@ -84,6 +86,9 @@ public class Trial : MonoBehaviour {
         myOrders[0] = myOrderUI[0].options[myOrderUI[0].value].text;
         myOrders[1] = myOrderUI[1].options[myOrderUI[1].value].text;
         myOrders[2] = myOrderUI[2].options[myOrderUI[2].value].text;
+        myOrders[3] = myOrderUI[3].options[myOrderUI[3].value].text;
+        myOrders[4] = myOrderUI[4].options[myOrderUI[4].value].text;
+        myOrders[5] = myOrderUI[5].options[myOrderUI[5].value].text;
 
     }
 
@@ -122,15 +127,30 @@ public class Trial : MonoBehaviour {
         if (myTrial <= 9)
         {
             myAquisitionType = myOrders[0];//my first order slot
-        } else if (myTrial >= 10 && myTrial <= 19)
+        } else if (myTrial >= 10 && myTrial <= 18)
         {
             myAquisitionType = myOrders[1]; //my second order slot
-        } else if (myTrial >= 20 && myTrial <= 27)
+        } else if (myTrial >= 19 && myTrial <= 27)
         {
             myAquisitionType = myOrders[2]; //my third order slot
         }
+        else if (myTrial >= 28 && myTrial <= 36)
+        {
+            breakUI.SetActive(true); // Show break period UI
+            myAquisitionType = myOrders[3]; //my fourth order slot
+        }
+        else if (myTrial >= 37 && myTrial <= 45)
+        {
+            myAquisitionType = myOrders[4]; //my fifth order slot
+        }
+        else if (myTrial >= 46 && myTrial <= 54)
+        {
+            myAquisitionType = myOrders[5]; //my sixth order slot
+        } else if (myTrial > 55)
+        {
+            endUI.SetActive(true);
+        }
 
-        // TODO Alexia hasn't set up the feedback stuff yet
         FeedbackType(myAquisitionType); // Set up my hovering feedback functionality
 
         myWidth = myWidths[randomWidth]; // Set up with width
@@ -211,7 +231,7 @@ public class Trial : MonoBehaviour {
         }
     }
 
-    void ResetTimer()
+    public void ResetTimer()
     {
         myTimer = 0.0f;
     }
