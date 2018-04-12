@@ -28,6 +28,7 @@ public class Trial : MonoBehaviour {
     public Text myFilePath;
     public GameObject breakUI;
     public GameObject endUI;
+    public GameObject tryUI;
 
     // Data variables
     string[] myOrders = new String[6] {" ", " ", " ", " ", " ", " " }; // Store the acquisition order in this
@@ -70,6 +71,7 @@ public class Trial : MonoBehaviour {
     // (Button) Used for the start button to set up all the user and order data
     public void EnterInfo()
     {
+        isTrying = false;
         // Check that we have a valid User ID
         if (myUserUI.text != "")
         {
@@ -129,6 +131,7 @@ public class Trial : MonoBehaviour {
             myAquisitionType = myOrders[0];//my first order slot
         } else if (myTrial >= 10 && myTrial <= 18)
         {
+            if (isTrying) tryUI.SetActive(true);
             myAquisitionType = myOrders[1]; //my second order slot
         } else if (myTrial >= 19 && myTrial <= 27)
         {
