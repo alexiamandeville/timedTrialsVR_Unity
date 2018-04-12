@@ -42,6 +42,9 @@ public class Trial : MonoBehaviour {
     int randomWidth;
     bool mySelected;
 
+    // Demo things
+    bool isTrying;
+
     private void Start()
     {
         file = Application.persistentDataPath + "/" + "FittsData.csv";
@@ -54,6 +57,12 @@ public class Trial : MonoBehaviour {
 
         ResetData();
         controlTarget.SetActive(true); // Turn on our control target
+    }
+
+    // A public UI method to not collect data, but just try
+    public void TryButton()
+    {
+        isTrying = true;
     }
 
     // (Button) Used for the start button to set up all the user and order data
@@ -146,8 +155,14 @@ public class Trial : MonoBehaviour {
     public void TriggerEvent()
     {
         StartCoroutine(Wait());
-        SetFinalData();
-        StartCoroutine(Save()); // Save our data to a json file
+
+        // Only send data when we're not testing this thing out
+        if (!isTrying)
+        {
+            SetFinalData();
+            StartCoroutine(Save()); // Save our data to a json file
+        }
+
         ResetData();
         controlTarget.SetActive(true); // Turn on our control target
 
@@ -163,14 +178,36 @@ public class Trial : MonoBehaviour {
         switch (myType)
         {
             case "Haptics":
-                print("Haptics"); // TODO
+                SwitchHaptics(true);
+                SwitchVisuals(Color.white);
                 break;
             case "Visuals":
-                print("Visuals"); // TODO
+                SwitchHaptics(false);
+                SwitchVisuals(Color.yellow);
                 break;
             case "HV":
-                print("HV"); // TODO
+                SwitchHaptics(true);
+                SwitchVisuals(Color.yellow);
                 break;
+        }
+    }
+
+    // Method to turn on and off visuals for each button
+    void SwitchVisuals(Color myColor)
+    {
+        foreach (GameObject button in myButtons)
+        {
+            ColorBlock colorTint = button.GetComponent<Button>().colors;
+            colorTint.highlightedColor = myColor;
+        }
+    }
+
+    // Method to turn on and off haptics for each button
+    void SwitchHaptics(bool isHaptics)
+    {
+        foreach (GameObject button in myButtons)
+        {
+            button.GetComponent<VRTK.VRTK_InteractHaptics>().enabled = isHaptics;
         }
     }
 
@@ -189,6 +226,7 @@ public class Trial : MonoBehaviour {
         mySelected = false;
         randomButton = UnityEngine.Random.Range(0, 2);
         randomWidth = UnityEngine.Random.Range(0, 2);
+
     }
 
     void SetFinalData()
