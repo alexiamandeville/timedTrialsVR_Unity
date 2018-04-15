@@ -8,7 +8,7 @@ using System.IO;
 public class Trial : MonoBehaviour {
 
     // Data stuff
-    int _userID;
+    string _userID;
     int _trialID;
     string _acquisitionType; //my feedback type
     float _width;
@@ -26,14 +26,14 @@ public class Trial : MonoBehaviour {
     public GameObject myStartMenu;
     public GameObject controlTarget;
     public Text myFilePath;
-    public GameObject breakUI;
     public GameObject endUI;
     public GameObject tryUI;
 
     // Data variables
-    string[] myOrders = new String[6] {" ", " ", " ", " ", " ", " " }; // Store the acquisition order in this
+    string[] myOrders = new String[3] {" ", " ", " "}; // Store the acquisition order in this
     public float[] myWidths;
     public GameObject[] myButtons;
+    public GameObject[] myCanvases;
 
     // Temp variables
     string myAquisitionType;
@@ -44,9 +44,21 @@ public class Trial : MonoBehaviour {
     int randomButton;
     int randomWidth;
     bool mySelected;
+    int myHapticStrength;
 
     // Demo things
     bool isTrying;
+
+    public static void ShuffleArray<T>(T[] arr)
+    {
+        for (int i = arr.Length - 1; i > 0; i--)
+        {
+            int r = UnityEngine.Random.Range(0, i);
+            T tmp = arr[i];
+            arr[i] = arr[r];
+            arr[r] = tmp;
+        }
+    }
 
     private void Start()
     {
@@ -75,7 +87,7 @@ public class Trial : MonoBehaviour {
         // Check that we have a valid User ID
         if (myUserUI.text != "")
         {
-            _userID = int.Parse(myUserUI.text);
+            _userID = myUserUI.text;
         } else
         {
             print("Please enter a User ID to start");
@@ -88,9 +100,6 @@ public class Trial : MonoBehaviour {
         myOrders[0] = myOrderUI[0].options[myOrderUI[0].value].text;
         myOrders[1] = myOrderUI[1].options[myOrderUI[1].value].text;
         myOrders[2] = myOrderUI[2].options[myOrderUI[2].value].text;
-        myOrders[3] = myOrderUI[3].options[myOrderUI[3].value].text;
-        myOrders[4] = myOrderUI[4].options[myOrderUI[4].value].text;
-        myOrders[5] = myOrderUI[5].options[myOrderUI[5].value].text;
 
     }
 
@@ -99,7 +108,7 @@ public class Trial : MonoBehaviour {
     {
         controlTarget.SetActive(false); // Turn off our control target
 
-        StartTrial(); // Start our trials
+        StartTrial(); // Start our trialsf
     }
 
     void Update()
@@ -125,33 +134,37 @@ public class Trial : MonoBehaviour {
         _timestamp = DateTime.Now; // Set the timestamp of the trial
         myTrial += 1; // Increment my trial each time for this user on start
 
-        // Set up my acquisition type here
-        if (myTrial <= 9)
+        // If we are real time
+        if (!isTrying)
         {
-            myAquisitionType = myOrders[0];//my first order slot
-        } else if (myTrial >= 10 && myTrial <= 18)
+            // Set up my acquisition type here
+            if (myTrial <= 9)
+            {
+                myAquisitionType = myOrders[0];//my first order slot
+            }
+            else if (myTrial >= 10 && myTrial <= 18)
+            {
+                myAquisitionType = myOrders[1]; //my second order slot
+            }
+            else if (myTrial >= 19 && myTrial <= 27)
+            {
+                myAquisitionType = myOrders[2]; //my third order slot
+            }
+            else if (myTrial > 27)
+            {
+                endUI.SetActive(true);
+            }
+        } else
         {
-            if (isTrying) tryUI.SetActive(true);
-            myAquisitionType = myOrders[1]; //my second order slot
-        } else if (myTrial >= 19 && myTrial <= 27)
-        {
-            myAquisitionType = myOrders[2]; //my third order slot
-        }
-        else if (myTrial >= 28 && myTrial <= 36)
-        {
-            breakUI.SetActive(true); // Show break period UI
-            myAquisitionType = myOrders[3]; //my fourth order slot
-        }
-        else if (myTrial >= 37 && myTrial <= 45)
-        {
-            myAquisitionType = myOrders[4]; //my fifth order slot
-        }
-        else if (myTrial >= 46 && myTrial <= 54)
-        {
-            myAquisitionType = myOrders[5]; //my sixth order slot
-        } else if (myTrial > 55)
-        {
-            endUI.SetActive(true);
+            if (myTrial <= 3)
+            {
+                myAquisitionType = myOrders[0]; //my first order slot
+            }
+
+            if (myTrial == 4)
+            {
+                tryUI.SetActive(true); // Set UI up when we're in a demo
+            }
         }
 
         FeedbackType(myAquisitionType); // Set up my hovering feedback functionality
@@ -159,10 +172,8 @@ public class Trial : MonoBehaviour {
         myWidth = myWidths[randomWidth]; // Set up with width
         myButtons[randomButton].GetComponent<RectTransform>().localScale = new Vector3(myWidth, 1.0f, 1.0f); // Change the scale of the button
         myButtons[randomButton].SetActive(true); // Pick a random button to show
+        myCanvases[randomButton].SetActive(true);
         myButtonDistance = myButtons[randomButton].name; // Store which button was shown
-
-        print(myTrial);
-        print(myAquisitionType);
 
     }
 
@@ -178,6 +189,12 @@ public class Trial : MonoBehaviour {
     public void TriggerEvent()
     {
         StartCoroutine(Wait());
+        
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(0.3f);
 
         // Only send data when we're not testing this thing out
         if (!isTrying)
@@ -188,28 +205,22 @@ public class Trial : MonoBehaviour {
 
         ResetData();
         controlTarget.SetActive(true); // Turn on our control target
-
-    }
-
-    IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(1);
     }
 
     void FeedbackType(String myType)
     {
         switch (myType)
         {
-            case "Haptics":
-                SwitchHaptics(true);
+            case "Haptic":
+                SwitchHaptics(255);
                 SwitchVisuals(Color.white);
                 break;
-            case "Visuals":
-                SwitchHaptics(false);
+            case "Visual":
+                SwitchHaptics(0);
                 SwitchVisuals(Color.yellow);
                 break;
             case "HV":
-                SwitchHaptics(true);
+                SwitchHaptics(255);
                 SwitchVisuals(Color.yellow);
                 break;
         }
@@ -222,16 +233,22 @@ public class Trial : MonoBehaviour {
         {
             ColorBlock colorTint = button.GetComponent<Button>().colors;
             colorTint.highlightedColor = myColor;
+            colorTint.pressedColor = myColor;
+            button.GetComponent<Button>().colors = colorTint;
         }
     }
 
     // Method to turn on and off haptics for each button
-    void SwitchHaptics(bool isHaptics)
+    void SwitchHaptics(int haptics)
     {
-        foreach (GameObject button in myButtons)
-        {
-            button.GetComponent<VRTK.VRTK_InteractHaptics>().enabled = isHaptics;
-        }
+        myHapticStrength = haptics;
+    }
+
+    // Let's play haptics on a button when it's hovered (public UI)
+    public void PlayHaptics()
+    {
+        print(myHapticStrength + "haptics");
+        HapticHelper.instance.ProceduralTone(false, myHapticStrength, 20);
     }
 
     public void ResetTimer()
@@ -241,13 +258,19 @@ public class Trial : MonoBehaviour {
 
     void ResetData()
     {
+        myHapticStrength = 0;
         StopCoroutine(Save());
+        foreach (GameObject canvas in myCanvases)
+        {
+            canvas.SetActive(false);
+        }
         foreach (GameObject button in myButtons)
         {
             button.SetActive(false);
         }
+
         mySelected = false;
-        randomButton = UnityEngine.Random.Range(0, 2);
+        randomButton = UnityEngine.Random.Range(0, 3);
         randomWidth = UnityEngine.Random.Range(0, 2);
 
     }
@@ -269,7 +292,7 @@ public class Trial : MonoBehaviour {
         if (File.Exists(file))
         {
             // string dataCSV = "Timestamp,UserID,Trial,AcquisitionType,TargetDistance,TargetWidth,TargetSelect,TaskTime";
-            string dataCSV = _timestamp.ToString("yyyy/MM/dd HH:mm:ss") + "," + _userID.ToString() + "," + _trialID.ToString() + "," + _acquisitionType.ToString() + "," + _distance.ToString() + "," + _width.ToString() + "," + _selected.ToString() + "," + _taskTime.ToString();
+            string dataCSV = _timestamp.ToString("yyyy/MM/dd HH:mm:ss") + "," + _userID+ "," + _trialID.ToString() + "," + _acquisitionType.ToString() + "," + _distance.ToString() + "," + _width.ToString() + "," + _selected.ToString() + "," + _taskTime.ToString();
 
             line = File.AppendText(file);
             
