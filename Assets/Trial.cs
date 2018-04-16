@@ -41,24 +41,15 @@ public class Trial : MonoBehaviour {
     float myTimer = 0.0f;
     float myWidth;
     string myButtonDistance;
-    int randomButton;
-    int randomWidth;
+    int randomButton = 0;
+    int randomWidth = 0;
     bool mySelected;
     int myHapticStrength;
+    GameObject tempB; // For shuffling the array
+    float tempW;
 
     // Demo things
     bool isTrying;
-
-    public static void ShuffleArray<T>(T[] arr)
-    {
-        for (int i = arr.Length - 1; i > 0; i--)
-        {
-            int r = UnityEngine.Random.Range(0, i);
-            T tmp = arr[i];
-            arr[i] = arr[r];
-            arr[r] = tmp;
-        }
-    }
 
     private void Start()
     {
@@ -109,6 +100,26 @@ public class Trial : MonoBehaviour {
         controlTarget.SetActive(false); // Turn off our control target
 
         StartTrial(); // Start our trialsf
+    }
+
+    // We need to shuffle the array order for every 3rd trial
+    public void Shuffle()
+    {
+        for (int i = 0; i < myButtons.Length; i++)
+        {
+            int rnd = UnityEngine.Random.Range(0, myButtons.Length);
+            tempB = myButtons[rnd];
+            myButtons[rnd] = myButtons[i];
+            myButtons[i] = tempB;
+        }
+
+        for (int i = 0; i < myWidths.Length; i++)
+        {
+            int rnd = UnityEngine.Random.Range(0, myWidths.Length);
+            tempW = myWidths[rnd];
+            myWidths[rnd] = myWidths[i];
+            myWidths[i] = tempW;
+        }
     }
 
     void Update()
@@ -270,8 +281,18 @@ public class Trial : MonoBehaviour {
         }
 
         mySelected = false;
-        randomButton = UnityEngine.Random.Range(0, 3);
-        randomWidth = UnityEngine.Random.Range(0, 2);
+
+        // Starting our selection from 
+        if (randomButton < 3)
+        {
+            randomButton += 1;
+            randomWidth += 1;
+        } else
+        {
+            Shuffle();
+            randomButton = 0;
+            randomWidth = 0;
+        }
 
     }
 
