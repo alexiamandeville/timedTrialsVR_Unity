@@ -124,6 +124,7 @@ public class Trial : MonoBehaviour {
 
     void Update()
     {
+        print(randomButton);
         myTimer += Time.deltaTime; // Run timer
 
         if (Input.GetKeyDown(KeyCode.R)) // Reset timer button
@@ -200,7 +201,8 @@ public class Trial : MonoBehaviour {
     public void TriggerEvent()
     {
         StartCoroutine(Wait());
-        
+        ResetButtons();
+
     }
 
     IEnumerator Wait()
@@ -258,7 +260,6 @@ public class Trial : MonoBehaviour {
     // Let's play haptics on a button when it's hovered (public UI)
     public void PlayHaptics()
     {
-        print(myHapticStrength + "haptics");
         HapticHelper.instance.ProceduralTone(false, myHapticStrength, 20);
     }
 
@@ -282,18 +283,23 @@ public class Trial : MonoBehaviour {
 
         mySelected = false;
 
+    }
+
+    // Reset the buttons based on what trial we're on
+    private void ResetButtons()
+    {
         // Starting our selection from 
-        if (randomButton < 3)
+        if (randomButton < 2)
         {
             randomButton += 1;
             randomWidth += 1;
-        } else
+        }
+        else
         {
             Shuffle();
             randomButton = 0;
             randomWidth = 0;
         }
-
     }
 
     void SetFinalData()
