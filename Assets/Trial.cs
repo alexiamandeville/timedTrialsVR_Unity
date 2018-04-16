@@ -47,6 +47,7 @@ public class Trial : MonoBehaviour {
     int myHapticStrength;
     GameObject tempB; // For shuffling the array
     float tempW;
+    GameObject tempC;
 
     // Demo things
     bool isTrying;
@@ -105,14 +106,19 @@ public class Trial : MonoBehaviour {
     // We need to shuffle the array order for every 3rd trial
     public void Shuffle()
     {
+        // Canvases and buttons
         for (int i = 0; i < myButtons.Length; i++)
         {
             int rnd = UnityEngine.Random.Range(0, myButtons.Length);
+            tempC = myCanvases[rnd];
             tempB = myButtons[rnd];
+            myCanvases[rnd] = myCanvases[i];
             myButtons[rnd] = myButtons[i];
+            myCanvases[i] = tempC;
             myButtons[i] = tempB;
         }
 
+        // Widths
         for (int i = 0; i < myWidths.Length; i++)
         {
             int rnd = UnityEngine.Random.Range(0, myWidths.Length);
