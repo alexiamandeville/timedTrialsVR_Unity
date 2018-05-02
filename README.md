@@ -6,13 +6,13 @@ The goal of the project is to run participants through trials in VR to select bu
 
 This project includes a trial system in VR, for testing interactions based on time. It records data based on a user ID including the following:
 
-Timestamp<br>
-User ID<br>
-Feedback type (haptic, visual, both)<br>
-Target distance<br>
-Target width<br>
-User success type<br>
-Task selection time<br>
+* Timestamp
+* User ID
+* Feedback type (haptic, visual, both)
+* Target distance
+* Target width
+* User success type
+* Task selection time
 
 The application collects it locally into a comma-delimited text file accessible from the UI all your data collection dreams.
 
