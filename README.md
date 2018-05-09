@@ -18,7 +18,7 @@ This project includes a trial system in VR, for testing interactions based on ti
 
 The application collects it locally into a comma-delimited text file accessible from the UI all your data collection dreams.
 
-Want to know more about Fitts's law?: https://en.wikipedia.org/wiki/Fitts%27s_law <br>
+Want to know more about Fitts' law?: https://en.wikipedia.org/wiki/Fitts%27s_law <br>
 It predicts that the time required to rapidly move to a target area is a function of the ratio between the distance to the target and the width of the target.
 
 Using:<br>
