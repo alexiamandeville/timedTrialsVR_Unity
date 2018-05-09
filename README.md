@@ -1,4 +1,6 @@
-# FittsLawVR_Unity
+# TimedTrialsVR_Unity
+A vehicle for reseraching an adaptation of Fitts' Law. https://www.interaction-design.org/literature/topics/fitts-law
+
 An experiment measuring the optimal distance and angle at which a world-space UI object can be interacted with in VR.
 Developed in Unity 20173.0f3.
 
